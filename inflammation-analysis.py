@@ -11,6 +11,9 @@ def main(args):
     The Controller is responsible for:
     - selecting the necessary models and views for the current task
     - passing data between models and views
+
+    :param args: csv file containing inflammation data
+    :returns: mean, max, and min of inflammation data
     """
 
     in_files = args.infiles
