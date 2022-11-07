@@ -5,7 +5,7 @@ on: push
 
 # Define a single job
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
