@@ -43,4 +43,9 @@ def daily_min(data):
     :returns: min
     """
     return np.min(data, axis=0)
-    
+
+
+def patient_normalise(data):
+    """Normalise patient data from 2D array of inflammation data"""
+    maxes = np.max(data, axis=1)
+    return data /maxes[:, np.newaxis]
