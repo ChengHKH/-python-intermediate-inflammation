@@ -10,30 +10,62 @@ and each column represents a single day across all patients.
 import numpy as np
 
 
-class Patient:
+class Observation:
+    def __init__(self, day, value):
+        self.day = day
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+
+class Person:
     def __init__(self, name):
         self.name = name
-        self.observations = [] 
+
+    def __str__(self):
+        return self.name
 
 
+class Patient(Person):
+    def __init__(self, name, observations=None):
+        super().__init__(name)
+        self.id = id
+        self.observations = []
+        
+        if observations is not None:
+            self.observations = observations
+
+    @property
     def last_observation(self):
         return self.observations[-1]
-
     
     def add_observation(self, value, day=None):
         if day is None:
             try:
-                day = self.observations[-1]['day'] + 1
+                day = self.observations[-1].day + 1
             except IndexError:
                 day = 0
 
-        new_observation = {
-            'day': day,
-            'value': value,
-        }
-
+        new_observation = Observation(day, value)
         self.observations.append(new_observation)
         return new_observation
+
+
+class Doctor(Person):
+    def __init__(self, name):
+        super().__init__(name)
+        self.patients = []
+
+    @property
+    def patient_names(self):
+        return p.name for p in self.patients
+
+    def add_patient(self, patient):
+        if patient not in patient_names(self.patients):
+            new_patient = patient
+
+        self.patients.append(new_patient)
 
 
 def load_csv(filename):
