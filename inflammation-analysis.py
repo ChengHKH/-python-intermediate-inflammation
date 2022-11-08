@@ -48,6 +48,8 @@ def main(args):
                 'standard deviation' :  models.daily_std_dev(inflammation_data),
             }
 
+            views.display_patient_stats(view_data)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
