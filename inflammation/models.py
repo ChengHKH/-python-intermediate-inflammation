@@ -57,13 +57,10 @@ class Doctor(Person):
         super().__init__(name)
         self.patients = []
 
-    @property
-    def patient_names(self):
-        return p.name for p in self.patients
-
-    def add_patient(self, patient):
-        if patient not in patient_names(self.patients):
-            new_patient = patient
+    def add_patient(self, new_patient):
+        for patient in self.patients:
+            if patient.name == new_patient.name:
+                return
 
         self.patients.append(new_patient)
 
