@@ -56,6 +56,11 @@ if __name__ == "__main__":
         description='A basic patient inflammation data management system')
 
     parser.add_argument(
+        'infiles',
+        nargs='+',
+        help='Input CSV(s) containing inflammation series for each patient')
+        
+    parser.add_argument(
         '--view',
         default='visualize',
         choices=['visualize', 'record', 'stats'],
