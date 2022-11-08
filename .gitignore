@@ -15,3 +15,7 @@
 
 # venv
 venv/
+
+# Example files
+functional.py
+oop.py
