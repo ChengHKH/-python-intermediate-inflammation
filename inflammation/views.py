@@ -30,3 +30,8 @@ def display_patient_record(patient):
     print(patient.name)
     for obs in patient.observations:
         print(obs.day, obs.value)
+
+
+def display_patient_stats(data_dict):
+    for (name, data) in data_dict.items():
+        print(name, data)

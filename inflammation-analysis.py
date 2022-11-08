@@ -39,6 +39,16 @@ def main(args):
             patient = models.Patient('UNKNOWN', observations)
 
             views.display_patient_record(patient)
+        
+        elif args.view == 'stats':
+            view_data = {
+                'average':              models.daily_mean(inflammation_data),
+                'max':                  models.daily_max(inflammation_data),
+                'min':                  models.daily_min(inflammation_data),
+                'standard deviation' :  models.daily_std_dev(inflammation_data),
+            }
+
+            views.display_patient_stats(view_data)
 
 
 if __name__ == "__main__":
@@ -46,16 +56,23 @@ if __name__ == "__main__":
         description='A basic patient inflammation data management system')
 
     parser.add_argument(
+        'infiles',
+        nargs='+',
+        help='Input CSV(s) containing inflammation series for each patient')
+        
+    parser.add_argument(
         '--view',
         default='visualize',
-        choices=['visualize', 'record'],
-        help='Which view should be used?')
+        choices=['visualize', 'record', 'stats'],
+        help='Which view should be used?'
+    )
 
     parser.add_argument(
         '--patient',
         type=int,
         default=0,
-        help='Which patient should be displayed?')
+        help='Which patient should be displayed?'
+    )
 
     args = parser.parse_args()
 
