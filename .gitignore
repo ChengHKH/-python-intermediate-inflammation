@@ -19,3 +19,6 @@ venv/
 # Example files
 functional.py
 oop.py
+
+# Distribution
+dist/
