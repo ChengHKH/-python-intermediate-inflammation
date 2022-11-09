@@ -1,3 +1,5 @@
+import json
+
 from inflammation import models
 
 class PatientSerialiser:
@@ -5,16 +7,25 @@ class PatientSerialiser:
 
     @classmethod
     def serialise(cls, instances):
-        raise NotImplementedError
-
-    @classmethod
-    def save(cls, instances, path):
-        raise NotImplementedError
+        return [{
+            'name': instance.name,
+            'observations': instance.observations,
+        } for instance in instances]
 
     @classmethod
     def deserialise(cls, data):
-        raise NotImplementedError
+        return [cls.model(**d) for d in data]
+
+
+class PatientJSONSerialiser(PatientSerialiser):
+    @classmethod
+    def save(cls, instances, path):
+        with open(path, 'w') as jsonfile:
+            json.dump(cls.serialise(instances), jsonfile)
 
     @classmethod
     def load(cls, path):
-        raise NotImplementedError
+        with open(path) as jsonfile:
+            data = json.load(jsonfile)
+
+        return cls.deserialise(data)
