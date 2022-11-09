@@ -2,6 +2,40 @@ import json
 
 from inflammation import models
 
+
+class Serialiser:
+    @classmethod
+    def serialise(cls, instances):
+        raise NotImplementedError
+
+    @classmethod
+    def save(cls, instances):
+        raise NotImplementedError
+    
+    @classmethod
+    def deserialise(cls, instances):
+        raise NotImplementedError
+    
+    @classmethod
+    def load(cls, instances):
+        raise NotImplementedError
+
+
+class ObservationSerialiser(Serialiser):
+    model = models.Observation
+
+    @classmethod
+    def serialise(cls, instances):
+        return [{
+            'day': instance.day,
+            'value': instance.value,
+        } for instance in instances]
+
+    @classmethod
+    def deserialise(cls, data):
+        return [cls.model(**d) for d in data]
+
+
 class PatientSerialiser:
     model = models.Patient
 
@@ -9,12 +43,18 @@ class PatientSerialiser:
     def serialise(cls, instances):
         return [{
             'name': instance.name,
-            'observations': instance.observations,
+            'observations': ObservationSerialiser.serialise(instance.observations),
         } for instance in instances]
 
     @classmethod
     def deserialise(cls, data):
-        return [cls.model(**d) for d in data]
+        instances = []
+
+        for item in data:
+            item['observations'] = ObservationSerialiser.deserialise(item.pop('observations'))
+            instances.append(cls.model(**item))
+
+        return instances
 
 
 class PatientJSONSerialiser(PatientSerialiser):
