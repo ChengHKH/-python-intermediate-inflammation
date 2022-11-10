@@ -34,7 +34,7 @@ class Patient(Person):
     __tablename__ = 'patients'
 
     id = Column(Integer, primary_key=True)
-    name = Column(string)
+    name = Column(String)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
