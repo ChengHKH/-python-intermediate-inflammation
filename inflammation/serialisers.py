@@ -1,9 +1,10 @@
+from abc import ABC
 import json
 
 from inflammation import models
 
 
-class Serialiser:
+class Serialiser(ABC):
     @classmethod
     def serialise(cls, instances):
         raise NotImplementedError
