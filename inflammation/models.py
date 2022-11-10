@@ -8,7 +8,7 @@ and each column represents a single day across all patients.
 """
 
 import numpy as np
-from sqlalchemy import Column, create_engine, Integer, string
+from sqlalchemy import Column, create_engine, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
