@@ -8,7 +8,10 @@ and each column represents a single day across all patients.
 """
 
 import numpy as np
+from sqlalchemy import Column, create_engine, Integer, string
+from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
 
 class Observation:
     def __init__(self, day, value):
@@ -28,13 +31,17 @@ class Person:
 
 
 class Patient(Person):
-    def __init__(self, name, observations=None):
-        super().__init__(name)
-        self.id = id
+    __tablename__ = 'patients'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(string)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self.observations = []
-        
-        if observations is not None:
-            self.observations = observations
+        if 'observations' in kwargs:
+            self.observations = kwargs['observations']
 
     @property
     def last_observation(self):
