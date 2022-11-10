@@ -34,4 +34,5 @@ def display_patient_record(patient):
 
 def display_patient_stats(data_dict):
     for (name, data) in data_dict.items():
-        print(name, data)
+        print(name)
+        print(data)
