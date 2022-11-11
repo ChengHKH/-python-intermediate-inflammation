@@ -2,6 +2,8 @@
 
 import numpy as np
 import numpy.testing as npt
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 import pytest
 
 @pytest.mark.parametrize(
@@ -74,3 +76,24 @@ def test_patient_normalise(test, expected, expect_raises):
             npt.assert_almost_equal(patient_normalise(np.array(test)), np.array(expected), decimal=2)
     else:
         npt.assert_almost_equal(patient_normalise(np.array(test)), np.array(expected), decimal=2)
+
+
+def test_sqlalchemy_patient_search():
+    """Test that patient data can be saved to and retrieved from a database."""
+    from inflammation.models import Base, Patient
+
+    # Set up database connection
+    # Database is stored in memory
+    engine = create_engine('sqlite:///:memory:', echo = True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    Base.metadata.create_all(engine)
+
+    test_patient = Patient(name='Alice')
+    session.add(test_patient)
+
+    queried_patient = session.query(Patient).filter_by(name='Alice').first()
+    self.assertEqual(queried_patient.name, 'Alice')
+    self.assertEqual(queried_patient.id, 1)
+
+    Base.metadata.drop_all(engine)
