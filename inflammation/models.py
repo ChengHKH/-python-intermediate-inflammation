@@ -8,18 +8,38 @@ and each column represents a single day across all patients.
 """
 
 import numpy as np
-from sqlalchemy import Column, create_engine, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
-class Observation:
-    def __init__(self, day, value):
-        self.day = day
-        self.value = value
+class Observation(Base):
+    __tablename__ = 'observations'
 
-    def __str__(self):
-        return str(self.value)
+    id = Column(Integer, primary_key = True)
+    day = Column(Integer)
+    value = Column(Integer)
+    patient_id = Column(Integer, ForeignKey('patients.id'))
+
+    patient = relationship('Patient', back_populates = 'observations')
+
+
+class Patient(Base):
+    __tablename__ = 'patients'
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+
+    observations = relationship('Observation', order_by = Observation.day, back_populates = 'patient')
+
+# class Observation:
+#     def __init__(self, day, value):
+#         self.day = day
+#         self.value = value
+
+#     def __str__(self):
+#         return str(self.value)
 
 
 class Person:
@@ -30,33 +50,33 @@ class Person:
         return self.name
 
 
-class Patient(Person):
-    __tablename__ = 'patients'
+# class Patient(Person):
+#     __tablename__ = 'patients'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+#     id = Column(Integer, primary_key=True)
+#     name = Column(String)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
 
-        self.observations = []
-        if 'observations' in kwargs:
-            self.observations = kwargs['observations']
+#         self.observations = []
+#         if 'observations' in kwargs:
+#             self.observations = kwargs['observations']
 
-    @property
-    def last_observation(self):
-        return self.observations[-1]
+#     @property
+#     def last_observation(self):
+#         return self.observations[-1]
     
-    def add_observation(self, value, day=None):
-        if day is None:
-            try:
-                day = self.observations[-1].day + 1
-            except IndexError:
-                day = 0
+#     def add_observation(self, value, day=None):
+#         if day is None:
+#             try:
+#                 day = self.observations[-1].day + 1
+#             except IndexError:
+#                 day = 0
 
-        new_observation = Observation(day, value)
-        self.observations.append(new_observation)
-        return new_observation
+#         new_observation = Observation(day, value)
+#         self.observations.append(new_observation)
+#         return new_observation
 
 
 class Doctor(Person):
