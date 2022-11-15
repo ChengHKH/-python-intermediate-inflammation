@@ -33,6 +33,16 @@ class Patient(Base):
 
     observations = relationship('Observation', order_by = Observation.day, back_populates = 'patient')
 
+    @property
+    def values(self):
+        last_day = self.observations[-1].day
+        values = np.zeros(last_day + 1)
+
+        for observation in self.observations:
+            values[observations.day] = observation.value
+
+        return values
+
 # class Observation:
 #     def __init__(self, day, value):
 #         self.day = day
