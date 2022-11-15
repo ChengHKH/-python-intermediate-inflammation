@@ -97,3 +97,29 @@ def test_sqlalchemy_patient_search():
     self.assertEqual(queried_patient.id, 1)
 
     Base.metadata.drop_all(engine)
+
+
+def test_sqlalchemy_patient_observations():
+    """Test that patient data can be saved to and retrieved from a database."""
+    from inflammation.models import Base, Observation, Patient
+
+    # Set up database connection
+    # Database is stored in memory
+    engine = create_engine('sqlite:///:memory:', echo = True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    Base.metadata.create_all(engine)
+
+    test_patient = Patient(name='Alice')
+    session.add(test_patient)
+
+    test_observation = Observation(patient = test_patient, day = 0, value = 1)
+    session.add(test_observation)
+
+    queried_patient = session.query(Patient).filter_by(name='Alice').first()
+    first_observation = queried_patient.observations[0]
+    self.assertEqual(first_observation.patient, queried_patient)
+    self.assertEqual(first_observation.day, 0)
+    self.asserEqual(first_observation.value, 1)
+
+    Base.metadata.drop_all(engine)
