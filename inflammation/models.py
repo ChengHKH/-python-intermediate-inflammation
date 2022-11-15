@@ -39,7 +39,7 @@ class Patient(Base):
         values = np.zeros(last_day + 1)
 
         for observation in self.observations:
-            values[observations.day] = observation.value
+            values[observation.day] = observation.value
 
         return values
 
